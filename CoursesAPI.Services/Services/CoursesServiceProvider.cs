@@ -17,6 +17,7 @@ namespace CoursesAPI.Services.Services
 		private readonly IRepository<CourseTemplate> _courseTemplates; 
 		private readonly IRepository<Person> _persons;
         //---------------------------------------------
+        private readonly IRepository<Semester> _semesters;
         private readonly IRepository<Grade> _grades;
         private readonly IRepository<Project> _projects;
         private readonly IRepository<ProjectGroup> _projectgroups;
@@ -35,23 +36,32 @@ namespace CoursesAPI.Services.Services
 		public List<Person> GetCourseTeachers(int courseInstanceID)
 		{
             //TODO
-			var result =(from t in _teacherRegistrations.All()
-                          join cs in _persons.All() on t.SSN equals cs.SSN
-                          where t.CourseInstanceID == courseInstanceID
-                         select new Person
-                         {
-                            ID = cs.ID,
-                            SSN = cs.SSN,
-                            Name = cs.Name,
-                            Email = cs.Email
-                       }).ToList(); 
-    //Fikt fyrir ofan
+            var result = (from tr in _teacherRegistrations.All()
+                          join p in _persons.All() on tr.SSN equals p.SSN
+                          where tr.CourseInstanceID == courseInstanceID
+                          select p
+                          ).ToList();
+
 			return result;
 		}
 
 		public List<CourseInstanceDTO> GetCourseInstancesOnSemester(string semester)
 		{
 			// TODO:
+          /*  var result = (from ci in _courseInstances.All()
+                          join s in _semesters.All() on ci.SemesterID equals s.ID                  
+                          where s.ID == semester
+                          && 
+                          select new CourseInstanceDTO
+                          {
+                              CourseID = ci.CourseID,
+                              CourseInstanceID = ci.ID,
+                              Name = s.Name,
+                              MainTeacher = 
+                          }
+                         ).ToList();
+           * í vinnslu, muna að returna result
+            */
 			return null;
 		}
 

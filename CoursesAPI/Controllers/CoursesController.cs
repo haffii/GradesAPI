@@ -17,12 +17,14 @@ namespace CoursesAPI.Controllers
 			_service = new CoursesServiceProvider(new UnitOfWork<AppDataContext>());
 		}
 
-		[Route("{courseInstanceID}/teachers")]
+        [HttpGet]
+		[Route("{courseInstanceID:int}/teachers")]
 		public List<Person> GetCourseTeachers(int courseInstanceID)
 		{
-			return _service.GetCourseTeachers(courseInstanceID);
+            return _service.GetCourseTeachers(courseInstanceID);
 		}
 		
+        [HttpGet]
 		[Route("semester/{semester}")]
 		public List<CourseInstanceDTO> GetCoursesOnSemester(string semester)
 		{
