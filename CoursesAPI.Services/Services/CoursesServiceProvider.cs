@@ -16,6 +16,11 @@ namespace CoursesAPI.Services.Services
 		private readonly IRepository<TeacherRegistration> _teacherRegistrations;
 		private readonly IRepository<CourseTemplate> _courseTemplates; 
 		private readonly IRepository<Person> _persons;
+        //---------------------------------------------
+        private readonly IRepository<Grade> _grades;
+        private readonly IRepository<Project> _projects;
+        private readonly IRepository<ProjectGroup> _projectgroups;
+
 
 		public CoursesServiceProvider(IUnitOfWork uow)
 		{
@@ -29,8 +34,19 @@ namespace CoursesAPI.Services.Services
 
 		public List<Person> GetCourseTeachers(int courseInstanceID)
 		{
-			// TODO:
-			return null;
+            //TODO
+			var result =(from t in _teacherRegistrations.All()
+                          join cs in _persons.All() on t.SSN equals cs.SSN
+                          where t.CourseInstanceID == courseInstanceID
+                         select new Person
+                         {
+                            ID = cs.ID,
+                            SSN = cs.SSN,
+                            Name = cs.Name,
+                            Email = cs.Email
+                       }).ToList(); 
+    //Fikt fyrir ofan
+			return result;
 		}
 
 		public List<CourseInstanceDTO> GetCourseInstancesOnSemester(string semester)
