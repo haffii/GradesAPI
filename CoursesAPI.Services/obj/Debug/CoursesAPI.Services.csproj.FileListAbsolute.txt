@@ -1,0 +1,12 @@
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\bin\Debug\CoursesAPI.Services.dll.config
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\bin\Debug\CoursesAPI.Services.dll
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\bin\Debug\CoursesAPI.Services.pdb
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\bin\Debug\CoursesAPI.Models.dll
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\bin\Debug\EntityFramework.dll
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\bin\Debug\CoursesAPI.Models.pdb
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\bin\Debug\EntityFramework.xml
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\obj\Debug\CoursesAPI.Services.csprojResolveAssemblyReference.cache
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\obj\Debug\CoursesAPI.Services.dll
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Services\obj\Debug\CoursesAPI.Services.pdb
