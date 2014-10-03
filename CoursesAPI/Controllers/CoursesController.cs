@@ -30,5 +30,12 @@ namespace CoursesAPI.Controllers
 		{
 			return _service.GetSemesterCourses(semester);
 		}
+
+        [HttpPost]
+        [Route("projectgroups")]
+        public AddProjectGroupViewModel AddProjectGroup(AddProjectGroupViewModel model)
+        {
+           return _service.AddProjectGroup(model);
+        }
 	}
 }

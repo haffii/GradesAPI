@@ -31,6 +31,12 @@ namespace CoursesAPI.Services.Services
 			_courseTemplates      = _uow.GetRepository<CourseTemplate>();
 			_teacherRegistrations = _uow.GetRepository<TeacherRegistration>();
 			_persons              = _uow.GetRepository<Person>();
+
+            _semesters = _uow.GetRepository<Semester>();
+            _grades = _uow.GetRepository<Grade>();
+            _projects = _uow.GetRepository<Project>();
+            _projectgroups = _uow.GetRepository<ProjectGroup>();
+
 		}
 
 		public List<Person> GetCourseTeachers(int courseInstanceID)
@@ -48,20 +54,22 @@ namespace CoursesAPI.Services.Services
 		public List<CourseInstanceDTO> GetCourseInstancesOnSemester(string semester)
 		{
 			// TODO:
-          /*  var result = (from ci in _courseInstances.All()
+          /* var result = (from ci in _courseInstances.All()
                           join s in _semesters.All() on ci.SemesterID equals s.ID                  
-                          where s.ID == semester
-                          && 
+                          where s.ID == semester  
+                          join t in _teacherRegistrations.All() on ci.ID equals t.CourseInstanceID
+                          where t.Type == 1
+                          join p in _persons.All() on t.SSN equals p.SSN
                           select new CourseInstanceDTO
                           {
                               CourseID = ci.CourseID,
                               CourseInstanceID = ci.ID,
                               Name = s.Name,
-                              MainTeacher = 
+                              MainTeacher = p.Name
                           }
-                         ).ToList();
-           * í vinnslu, muna að returna result
-            */
+                         ).ToList(); */
+           // í vinnslu, muna að returna result
+           
 			return null;
 		}
 
@@ -70,5 +78,16 @@ namespace CoursesAPI.Services.Services
 			// TODO
 			return null;
 		}
+
+        public AddProjectGroupViewModel AddProjectGroup(AddProjectGroupViewModel model)
+        {
+
+            ProjectGroup a = new ProjectGroup();
+            a.GradesProjectCount = model.GradesProjectCount;
+            a.name = model.Name;
+            _projectgroups.Add(a);
+            _uow.Save();
+            return model;
+        }
 	}
 }
