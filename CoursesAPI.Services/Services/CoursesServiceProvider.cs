@@ -147,11 +147,31 @@ namespace CoursesAPI.Services.Services
 
         public FinalGradeViewModel GetFinalGrade(int CourseInstanceID,string SSN)
         {
-            var allProjects = (from p in _projects.All() where p.CourseInstanceID == CourseInstanceID select p).ToList();
+            var allProjectsForCourse = (from p in _projects.All()
+                                         join pg in _projectgroups.All() on p.ProjectGroupID equals pg.ID
+                                            where p.CourseInstanceID == CourseInstanceID
+                                        select new
+                                        {
+                                                MinGradeToPassCourse = p.MinGradeToPassCourse,
+                                                ProjectName = p.Name,
+                                                OnlyIfHigherThanProjectID = p.OnlyHigherThanProjectID,
+                                                ProjectGroupID = pg.ID,
+                                                Weight = p.Weight,
+                                                GradesProjectCount = pg.GradesProjectCount,
+                                                ProjectGroupName = pg.name,
+
+                                        }
+                                            ).ToList();
+
+          /*  for (int i = 0; i < allProjectsForCourse.Count(); i++)
+            {
+                System.Diagnostics.Debug.WriteLine(allProjectsForCourse[i].ProjectGroupName);
+            }*/
             var allMyGrades = (from g in _grades.All()
                           join p in _persons.All() on g.PersonID equals p.SSN
                           where p.SSN == SSN
                           join z in _projects.All() on g.ProjectID equals z.ID
+                          join k in _projectgroups.All() on z.ProjectGroupID equals k.ID
                           select new {
                               ProjectId = z.ID,
                               MinGradeToPass = z.MinGradeToPassCourse,
@@ -159,21 +179,24 @@ namespace CoursesAPI.Services.Services
                               ProjectGroupId = z.ProjectGroupID,
                               Weight = z.Weight,
                               GradeIs = g.GradeIs,
-                              SSN = p.SSN
+                              SSN = p.SSN,
+                              GradesProjectCount = k.GradesProjectCount,
+                              ProjectGroupName = k.name
 
                           }
                        ).ToList();
-            
-            
+            List<ProjectGroup> totalGroups = new List<ProjectGroup>();
+           
+
+           
+            System.Diagnostics.Debug.WriteLine("Number of ProjectGroups : "+totalGroups.Count());
+
             double totalWeight = 0;
             double? totalGrade = 0;
             for(int i = 0; i<allMyGrades.Count();i++)
             {
-                totalGrade += allMyGrades[i].GradeIs * 100 / allMyGrades[i].Weight;
+                totalGrade += allMyGrades[i].GradeIs;
                 totalWeight += allMyGrades[i].Weight;
-                System.Diagnostics.Debug.WriteLine("aetti bara ad koma einusinni : ");
-                System.Diagnostics.Debug.WriteLine(totalGrade);
-
             }
             return new FinalGradeViewModel
             {
