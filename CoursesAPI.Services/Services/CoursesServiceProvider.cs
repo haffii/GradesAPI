@@ -82,10 +82,40 @@ namespace CoursesAPI.Services.Services
         public AddProjectGroupViewModel AddProjectGroup(AddProjectGroupViewModel model)
         {
 
-            ProjectGroup a = new ProjectGroup();
-            a.GradesProjectCount = model.GradesProjectCount;
-            a.name = model.Name;
-            _projectgroups.Add(a);
+            ProjectGroup tempPG = new ProjectGroup();
+            tempPG.GradesProjectCount = model.GradesProjectCount;
+            tempPG.name = model.Name;
+            _projectgroups.Add(tempPG);
+            _uow.Save();
+            return model;
+        }
+
+        public ProjectViewModel AddProject(ProjectViewModel model,int courseInstanceID)
+        {
+
+            Project tempP = new Project();
+            
+            tempP.Name = model.Name;
+            tempP.ProjectGroupID = model.ProjectGroupID;
+            tempP.CourseInstanceID = courseInstanceID;
+            tempP.OnlyHigherThanProjectID = model.OnlyHigherThanProjectID;
+            tempP.Weight = model.Weight;
+            tempP.MinGradeToPassCourse =  model.MinGradeToPassCourse;
+
+            _projects.Add(tempP);
+            _uow.Save();
+            return model;
+        }
+
+        public GradeViewModel AddGrade(GradeViewModel model)
+        {
+
+            Grade tempG = new Grade();
+            tempG.PersonID = model.PersonID;
+            tempG.projectID = model.ProjectID;
+            tempG.grade = model.grade;
+
+            _grades.Add(tempG);
             _uow.Save();
             return model;
         }
