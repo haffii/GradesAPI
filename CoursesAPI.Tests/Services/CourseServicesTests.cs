@@ -147,7 +147,7 @@ namespace CoursesAPI.Tests.Services
                     OnlyHigherThanProjectID = null,
                     Weight = 10,
                     MinGradeToPassCourse = 5,
-}
+                }
             };
 
             _uow.SetRepositoryData(grades);
