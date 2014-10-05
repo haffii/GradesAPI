@@ -79,7 +79,7 @@ namespace CoursesAPI.Services.Services
 			return null;
 		}
 
-        public AddProjectGroupViewModel AddProjectGroup(AddProjectGroupViewModel model)
+        public AddProjectGroupDTO AddProjectGroup(AddProjectGroupDTO model)
         {
 
             ProjectGroup tempPG = new ProjectGroup();
@@ -90,7 +90,7 @@ namespace CoursesAPI.Services.Services
             return model;
         }
 
-        public ProjectViewModel AddProject(ProjectViewModel model,int courseInstanceID)
+        public ProjectDTO AddProject(ProjectDTO model,int courseInstanceID)
         {
 
             Project tempP = new Project();
@@ -107,17 +107,47 @@ namespace CoursesAPI.Services.Services
             return model;
         }
 
-        public GradeViewModel AddGrade(GradeViewModel model)
+        public GradeDTO AddGrade(GradeDTO model)
         {
 
             Grade tempG = new Grade();
             tempG.PersonID = model.PersonID;
-            tempG.projectID = model.ProjectID;
+            tempG.ProjectID = model.ProjectID;
             tempG.GradeIs = model.GradeIs;
 
             _grades.Add(tempG);
             _uow.Save();
             return model;
         }
+
+        public GradeViewModel GetGrade(int ProjectID, string SSN)
+        {
+
+            var tempGrade = _grades.All().SingleOrDefault(g => g.ProjectID == ProjectID && g.PersonID == SSN);
+            var tempProject = _projects.All().SingleOrDefault(p => p.ID == ProjectID);
+
+
+            return new GradeViewModel
+            {
+                ProjectName = tempProject.Name,
+                Grade = tempGrade.GradeIs
+                
+            };
+        }
+
+        public void GetFinalGrade(int CourseInstanceID,string SSN)
+        {
+
+            var allMyGrades = (from g in _grades.All()
+                          join p in _persons.All() on g.PersonID equals p.SSN
+                          where p.SSN == SSN
+                          select g
+                       ).ToList();
+            var allMyProjects = (from p in _projects.All()
+                                 join g in allMyGrades on p.ID equals g.ProjectID                                
+                                 select p
+                        ).ToList();
+        }
+
 	}
 }
