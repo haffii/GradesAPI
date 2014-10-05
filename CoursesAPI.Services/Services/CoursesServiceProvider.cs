@@ -135,18 +135,52 @@ namespace CoursesAPI.Services.Services
             };
         }
 
-        public void GetFinalGrade(int CourseInstanceID,string SSN)
+        public ProjectGroup GetProjectGroup(int ProjectGroupID)
         {
+            return _projectgroups.All().SingleOrDefault(p => p.ID == ProjectGroupID);
+        }
 
+        public Project GetProject(int ProjectID)
+        {
+            return _projects.All().SingleOrDefault(p => p.ID == ProjectID);
+        }
+
+        public FinalGradeViewModel GetFinalGrade(int CourseInstanceID,string SSN)
+        {
+            var allProjects = (from p in _projects.All() where p.CourseInstanceID == CourseInstanceID select p).ToList();
             var allMyGrades = (from g in _grades.All()
                           join p in _persons.All() on g.PersonID equals p.SSN
                           where p.SSN == SSN
-                          select g
+                          join z in _projects.All() on g.ProjectID equals z.ID
+                          select new {
+                              ProjectId = z.ID,
+                              MinGradeToPass = z.MinGradeToPassCourse,
+                              ProjectName = z.Name,
+                              ProjectGroupId = z.ProjectGroupID,
+                              Weight = z.Weight,
+                              GradeIs = g.GradeIs,
+                              SSN = p.SSN
+
+                          }
                        ).ToList();
-            var allMyProjects = (from p in _projects.All()
-                                 join g in allMyGrades on p.ID equals g.ProjectID                                
-                                 select p
-                        ).ToList();
+            
+            
+            double totalWeight = 0;
+            double? totalGrade = 0;
+            for(int i = 0; i<allMyGrades.Count();i++)
+            {
+                totalGrade += allMyGrades[i].GradeIs * 100 / allMyGrades[i].Weight;
+                totalWeight += allMyGrades[i].Weight;
+                System.Diagnostics.Debug.WriteLine("aetti bara ad koma einusinni : ");
+                System.Diagnostics.Debug.WriteLine(totalGrade);
+
+            }
+            return new FinalGradeViewModel
+            {
+                TotalWeight = totalWeight,
+                FinalGrade = totalGrade
+            };
+            
         }
 
 	}
