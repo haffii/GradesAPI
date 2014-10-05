@@ -14,7 +14,7 @@ namespace CoursesAPI.Services.Models.Entities
 
         public string PersonID { get; set; }
 
-        public double? grade { get; set; }
+        public double? GradeIs { get; set; }
 
     }
 }

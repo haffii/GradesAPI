@@ -113,7 +113,7 @@ namespace CoursesAPI.Services.Services
             Grade tempG = new Grade();
             tempG.PersonID = model.PersonID;
             tempG.projectID = model.ProjectID;
-            tempG.grade = model.grade;
+            tempG.GradeIs = model.GradeIs;
 
             _grades.Add(tempG);
             _uow.Save();
