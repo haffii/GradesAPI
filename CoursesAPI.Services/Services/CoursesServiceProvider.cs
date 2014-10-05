@@ -90,14 +90,14 @@ namespace CoursesAPI.Services.Services
             return model;
         }
 
-        public ProjectViewModel AddProject(ProjectViewModel model,int courseInstanceID)
+        public ProjectViewModel AddProject(ProjectViewModel model)
         {
 
             Project tempP = new Project();
             
             tempP.Name = model.Name;
             tempP.ProjectGroupID = model.ProjectGroupID;
-            tempP.CourseInstanceID = courseInstanceID;
+            tempP.CourseInstanceID = model.CourseInstanceID;
             tempP.OnlyHigherThanProjectID = model.OnlyHigherThanProjectID;
             tempP.Weight = model.Weight;
             tempP.MinGradeToPassCourse =  model.MinGradeToPassCourse;
@@ -112,12 +112,16 @@ namespace CoursesAPI.Services.Services
 
             Grade tempG = new Grade();
             tempG.PersonID = model.PersonID;
-            tempG.projectID = model.ProjectID;
-            tempG.grade = model.grade;
+            tempG.ProjectID = model.ProjectID;
+            tempG.GradeIs = model.GradeIs;
 
             _grades.Add(tempG);
             _uow.Save();
             return model;
+        }
+        public GradeDTO GetGrades(int courseInstanceID,int projectID,string SSN)
+        {
+            return null;
         }
 	}
 }

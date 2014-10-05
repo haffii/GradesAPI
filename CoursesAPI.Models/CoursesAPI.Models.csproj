@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AddProjectGroupViewModel.cs" />
     <Compile Include="CourseInstanceDTO.cs" />
+    <Compile Include="GradeDTO.cs" />
     <Compile Include="GradeViewModel.cs" />
     <Compile Include="ProjectViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
