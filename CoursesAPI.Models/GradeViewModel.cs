@@ -10,7 +10,7 @@ namespace CoursesAPI.Models
         [Required]
         public int ProjectID { get; set; }
 
-        public double? GradeIs { get; set; }
+        public double? grade { get; set; }
 
     }
 }

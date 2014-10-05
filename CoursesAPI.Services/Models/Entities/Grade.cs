@@ -10,11 +10,11 @@ namespace CoursesAPI.Services.Models.Entities
     {
         public int ID { get; set; }
 
-        public int ProjectID { get; set; }
+        public int projectID { get; set; }
 
         public string PersonID { get; set; }
 
-        public double? GradeIs { get; set; }
+        public double? grade { get; set; }
 
     }
 }
