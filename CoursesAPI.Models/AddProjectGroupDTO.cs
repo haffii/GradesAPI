@@ -2,7 +2,7 @@
 
 namespace CoursesAPI.Models
 {
-    public class AddProjectGroupViewModel
+    public class AddProjectGroupDTO
     {
         [Required]
         public string Name { get; set; }

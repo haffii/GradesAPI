@@ -33,23 +33,42 @@ namespace CoursesAPI.Controllers
 
         [HttpPost]
         [Route("projectgroups")]
-        public AddProjectGroupViewModel AddProjectGroup(AddProjectGroupViewModel model)
+        public AddProjectGroupDTO AddProjectGroup(AddProjectGroupDTO model)
         {
            return _service.AddProjectGroup(model);
         }
 
         [HttpPost]
         [Route("{courseInstanceID}/project")]
-        public ProjectViewModel AddProject(ProjectViewModel model,int courseInstanceID)
+        public ProjectDTO AddProject(ProjectDTO model,int courseInstanceID)
         {
             return _service.AddProject(model,courseInstanceID);
         }
 
         [HttpPost]
         [Route("grade")]
-        public GradeViewModel AddGrade(GradeViewModel model)
+        public GradeDTO AddGrade(GradeDTO model)
         {
             return _service.AddGrade(model);
         }
+
+        [HttpGet]
+        [Route("grade/{ProjectID}")]
+        public GradeViewModel GetGrade(int ProjectID)
+        {
+            string SSN = "2211902119";
+            return _service.GetGrade(ProjectID,SSN);
+        }
+
+       [HttpGet]
+       [Route("{CourseInstanceID}/finalgrade")]
+        public void FinalGrade(int CourseInstanceID)
+       {
+           string SSN = "2211902119";
+           _service.GetFinalGrade(CourseInstanceID, SSN);
+       }
+
+
+
 	}
 }

@@ -47,12 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\AppDataContext.cs" />
-    <Compile Include="DataAccess\IDBContext.cs" />
-    <Compile Include="DataAccess\IRepository.cs" />
-    <Compile Include="DataAccess\IUnitOfWork.cs" />
-    <Compile Include="DataAccess\Repository.cs" />
-    <Compile Include="DataAccess\UnitOfWork.cs" />
+    <Compile Include="Models\DataAccess\AppDataContext.cs" />
+    <Compile Include="Models\DataAccess\IDBContext.cs" />
+    <Compile Include="Models\DataAccess\IRepository.cs" />
+    <Compile Include="Models\DataAccess\IUnitOfWork.cs" />
+    <Compile Include="Models\DataAccess\Repository.cs" />
+    <Compile Include="Models\DataAccess\UnitOfWork.cs" />
     <Compile Include="Models\Entities\CourseInstance.cs" />
     <Compile Include="Models\Entities\CourseTemplate.cs" />
     <Compile Include="Models\Entities\Grade.cs" />
