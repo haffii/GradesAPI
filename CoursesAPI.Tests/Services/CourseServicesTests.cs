@@ -75,40 +75,90 @@ namespace CoursesAPI.Tests.Services
 		}
 
         [TestMethod]
-        public void AddProject()
+        public void AddProjectGroup()
         {
             // Arrange:
+            const String n = "TestP";
+            const int c = 2;
+
             var projectGroups = new List<ProjectGroup> { };
             _uow.SetRepositoryData(projectGroups);
 
             AddProjectGroupDTO pg = new AddProjectGroupDTO{
-                Name = "TestP",
-                GradesProjectCount = 2,
+                Name = n,
+                GradesProjectCount = c,
             };
             // Act:
             var result = _service.AddProjectGroup(pg);
-            var pgResult = _uow.GetRepository<ProjectGroup>();
+
             // Assert:
-            //Assert.AreEqual(1, );
+            var tmp = _service.GetProjectGroup(0);
+            Assert.IsNotNull(tmp, "No Project Group Added");
+            Assert.AreEqual(n , tmp.name, "Wrong Name");
+            Assert.AreEqual(c, tmp.GradesProjectCount, "Wrong Grades Project Count");
         }
 
         [TestMethod]
-        public void CoursesGetStudentListInDeregisteredStudents()
+        public void AddProject()
         {
             // Arrange:
+            var projects = new List<Project> { };
+            _uow.SetRepositoryData(projects);
+
+            ProjectDTO p = new ProjectDTO
+            {
+                Name = "test1",
+                ProjectGroupID = 1,
+                OnlyHigherThanProjectID = null,
+                Weight = 10,
+                MinGradeToPassCourse = 5,
+            };
 
             // Act:
+            var a = _service.AddProject(p, 1);
 
             // Assert:
+            var tmp = _service.GetProject(0);
+            Assert.IsNotNull(tmp, "No Project Added");
+            Assert.AreEqual("test1", tmp.Name);
         }
-		public void TestMethod1()
-		{
-			// Arrange:
 
-			// Act:
+        [TestMethod]
+        public void GetGrade()
+        {
+            // Arrange:
+            var grades = new List<Grade> { 
+                new Grade
+                {
+                 ID = 0,
+                 ProjectID = 0,
+                 PersonID = "2701903249",
+                 GradeIs = 9,
+                }
+            };
 
-			// Assert:
-		}
+            var projects = new List<Project>
+            {
+                new Project{
+                    ID = 0,
+                    Name = "testP",
+                    ProjectGroupID = 1,
+                    CourseInstanceID = 1,
+                    OnlyHigherThanProjectID = null,
+                    Weight = 10,
+                    MinGradeToPassCourse = 5,
+}
+            };
 
+            _uow.SetRepositoryData(grades);
+            _uow.SetRepositoryData(projects);
+
+            // Act:
+            var a = _service.GetGrade(0,"2701903249");
+
+            // Assert:
+            Assert.IsNotNull(a, "No Grade Found");
+            Assert.AreEqual(9, a.Grade);
+        }
 	}
 }
