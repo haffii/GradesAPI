@@ -62,10 +62,10 @@ namespace CoursesAPI.Controllers
 
        [HttpGet]
        [Route("{CourseInstanceID}/finalgrade")]
-        public void FinalGrade(int CourseInstanceID)
+        public FinalGradeViewModel FinalGrade(int CourseInstanceID)
        {
            string SSN = "2211902119";
-           _service.GetFinalGrade(CourseInstanceID, SSN);
+           return _service.GetFinalGrade(CourseInstanceID, SSN);
        }
 
 
