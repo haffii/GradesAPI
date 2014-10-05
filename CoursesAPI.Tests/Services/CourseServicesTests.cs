@@ -1,27 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-<<<<<<< HEAD
 using CoursesAPI.Services.Services;
 using CoursesAPI.Tests.MockObjects;
 using CoursesAPI.Services.Models.Entities;
 using CoursesAPI.Models;
 
-=======
->>>>>>> origin/master
 
 namespace CoursesAPI.Tests.Services
 {
 	[TestClass]
 	public class CourseServicesTests
 	{
+        private CoursesServiceProvider _service;
+        private MockUnitOfWork<MockDataContext> _uow;
+
 		[TestInitialize]
 		public void Setup()
 		{
+            _uow = new MockUnitOfWork<MockDataContext>();
+            _service = new CoursesServiceProvider(_uow);
 			// TODO: code which will be executed before each test!
 		}
 
 		[TestMethod]
-<<<<<<< HEAD
 		public void CheckGrade()
 		{
 			// Arrange:
@@ -99,7 +101,6 @@ namespace CoursesAPI.Tests.Services
 
             // Assert:
         }
-=======
 		public void TestMethod1()
 		{
 			// Arrange:
@@ -108,6 +109,6 @@ namespace CoursesAPI.Tests.Services
 
 			// Assert:
 		}
->>>>>>> origin/master
+
 	}
 }
