@@ -147,61 +147,102 @@ namespace CoursesAPI.Services.Services
 
         public FinalGradeViewModel GetFinalGrade(int CourseInstanceID,string SSN)
         {
-            var allProjectsForCourse = (from p in _projects.All()
-                                         join pg in _projectgroups.All() on p.ProjectGroupID equals pg.ID
-                                            where p.CourseInstanceID == CourseInstanceID
-                                        select new
-                                        {
-                                                MinGradeToPassCourse = p.MinGradeToPassCourse,
-                                                ProjectName = p.Name,
-                                                OnlyIfHigherThanProjectID = p.OnlyHigherThanProjectID,
-                                                ProjectGroupID = pg.ID,
-                                                Weight = p.Weight,
-                                                GradesProjectCount = pg.GradesProjectCount,
-                                                ProjectGroupName = pg.name,
 
-                                        }
-                                            ).ToList();
-
-          /*  for (int i = 0; i < allProjectsForCourse.Count(); i++)
-            {
-                System.Diagnostics.Debug.WriteLine(allProjectsForCourse[i].ProjectGroupName);
-            }*/
-            var allMyGrades = (from g in _grades.All()
-                          join p in _persons.All() on g.PersonID equals p.SSN
-                          where p.SSN == SSN
-                          join z in _projects.All() on g.ProjectID equals z.ID
-                          join k in _projectgroups.All() on z.ProjectGroupID equals k.ID
-                          select new {
-                              ProjectId = z.ID,
-                              MinGradeToPass = z.MinGradeToPassCourse,
-                              ProjectName = z.Name,
-                              ProjectGroupId = z.ProjectGroupID,
-                              Weight = z.Weight,
-                              GradeIs = g.GradeIs,
-                              SSN = p.SSN,
-                              GradesProjectCount = k.GradesProjectCount,
-                              ProjectGroupName = k.name
-
-                          }
-                       ).ToList();
-            List<ProjectGroup> totalGroups = new List<ProjectGroup>();
+            var allProjects = (from p in _projects.All()
+                                        join pg in _projectgroups.All() on p.ProjectGroupID equals pg.ID
+                                        where p.CourseInstanceID == CourseInstanceID
+                                        select  p 
+                                      ).ToList();
+            var a = (from pg in _projectgroups.All()
+                     join p in _projects.All() on pg.ID equals p.ProjectGroupID
+                     where p.CourseInstanceID == CourseInstanceID
+                     select pg).ToList();
            
+            List<ProjectGroup> mypg = new List<ProjectGroup>();
+            Boolean exists =false;
+             for (int i = 0; i < a.Count(); i++)
+             {
+                 if (i == 0)
+                 {
+                     mypg.Add(a[i]);
+                 }
+                 else
+                 {
+                     for(int x = 0; x<mypg.Count(); x++)
+                     {
+                         if (a[i] == mypg[x])
+                         {
+                             exists = true;
+                             break;
+                         }
+                     }
+                     if(!exists)
+                     {
+                         mypg.Add(a[i]);
+                     }
+                     exists = false;
+                 }
+             }
+             double? totalGrade = 0;
+             double totalWeight = 0;
+             for (int i = 0; i < mypg.Count(); i++) {
+                 int ID = mypg[i].ID;
+             var allMyGrades = (from g in _grades.All()
+                                join p in _persons.All() on g.PersonID equals p.SSN
+                                where p.SSN == SSN
+                                join z in _projects.All() on g.ProjectID equals z.ID
+                                join k in _projectgroups.All() on z.ProjectGroupID equals k.ID
+                                where k.ID == ID
+                                select new CombinedKnowledge
+                                {
+                                    ProjectId = z.ID,
+                                    MinGradeToPass = z.MinGradeToPassCourse,
+                                    ProjectName = z.Name,
+                                    ProjectGroupId = z.ProjectGroupID,
+                                    Weight = z.Weight,
+                                    GradeIs = g.GradeIs,
+                                    SSN = p.SSN,
+                                    GradesProjectCount = k.GradesProjectCount,
+                                    ProjectGroupName = k.name
 
+                                }
+                      ).ToList();
+                  allMyGrades.OrderBy(b => b.GradeIs);
+                  List<CombinedKnowledge> GradesThatCount = new List<CombinedKnowledge>();
+                  double mul;
+                 if(allMyGrades.Count() > allMyGrades[0].GradesProjectCount)
+                 {
+                     for (int x = 0; x < allMyGrades[0].GradesProjectCount; x++) { 
+                         GradesThatCount.Add(allMyGrades.Last());
+                         mul = System.Convert.ToDouble(GradesThatCount[x].Weight); 
+                         allMyGrades.Remove(allMyGrades.Last());
+                         mul = GradesThatCount[x].Weight/100;
+                         totalGrade += GradesThatCount[x].GradeIs * mul;
+                         totalWeight += mul;
+                     }
+                    
+                 }
+                 else
+                 {
+                     for (int x = 0; x < allMyGrades.Count(); x++)
+                     {
+                         mul = System.Convert.ToDouble(allMyGrades[x].Weight);
+                         mul /= 100;
+                         System.Diagnostics.Debug.WriteLine(mul);
+                         totalGrade += allMyGrades[x].GradeIs * mul;
+                         totalWeight += mul;
+                     }
+
+                 }
+                 
+             }
+            
+             
            
-            System.Diagnostics.Debug.WriteLine("Number of ProjectGroups : "+totalGroups.Count());
-
-            double totalWeight = 0;
-            double? totalGrade = 0;
-            for(int i = 0; i<allMyGrades.Count();i++)
-            {
-                totalGrade += allMyGrades[i].GradeIs;
-                totalWeight += allMyGrades[i].Weight;
-            }
             return new FinalGradeViewModel
             {
-                TotalWeight = totalWeight,
-                FinalGrade = totalGrade
+                TotalWeight = totalWeight*10,
+                FinalGrade = totalGrade 
             };
             
         }

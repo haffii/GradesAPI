@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddProjectGroupDTO.cs" />
+    <Compile Include="CombinedKnowledge.cs" />
     <Compile Include="CourseInstanceDTO.cs" />
     <Compile Include="FinalGradeViewModel.cs" />
     <Compile Include="GradeDTO.cs" />
