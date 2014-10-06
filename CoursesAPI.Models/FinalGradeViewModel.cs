@@ -10,7 +10,6 @@ namespace CoursesAPI.Models
     {
         public double? FinalGrade { get; set; }
         public double TotalWeight { get; set; }
-
-
+        public double? GradeCompleted { get; set; }
     }
 }

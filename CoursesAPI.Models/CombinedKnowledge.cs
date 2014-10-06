@@ -9,7 +9,7 @@ namespace CoursesAPI.Models
     public class CombinedKnowledge
     {
     public int   ProjectId {get;set;}
-    public double? MinGradeToPass {get;set;}
+    public double? MinGradeToPassCourse {get;set;}
     public string ProjectName{get;set;}
     public int ProjectGroupId {get;set;}
     public int Weight{get;set;}

@@ -39,10 +39,10 @@ namespace CoursesAPI.Controllers
         }
 
         [HttpPost]
-        [Route("{courseInstanceID}/project")]
-        public ProjectDTO AddProject(ProjectDTO model,int courseInstanceID)
+        [Route("project")]
+        public ProjectDTO AddProject(ProjectDTO model)
         {
-            return _service.AddProject(model,courseInstanceID);
+            return _service.AddProject(model);
         }
 
         [HttpPost]

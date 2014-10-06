@@ -9,8 +9,8 @@ namespace CoursesAPI.Models
     public class ProjectDTO
     {
         public string Name { get; set; }
-        public int ProjectGroupID { get; set; }
-        //public int CourseInstanceID { get; set; }
+        public int ProjectGroupID { get; set; } 
+        public int CourseInstanceID { get; set; }
         public int? OnlyHigherThanProjectID { get; set; }
         public int Weight { get; set; }
         public double? MinGradeToPassCourse { get; set; }

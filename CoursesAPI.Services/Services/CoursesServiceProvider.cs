@@ -90,14 +90,14 @@ namespace CoursesAPI.Services.Services
             return model;
         }
 
-        public ProjectDTO AddProject(ProjectDTO model,int courseInstanceID)
+        public ProjectDTO AddProject(ProjectDTO model)
         {
 
             Project tempP = new Project();
             
             tempP.Name = model.Name;
             tempP.ProjectGroupID = model.ProjectGroupID;
-            tempP.CourseInstanceID = courseInstanceID;
+            tempP.CourseInstanceID = model.CourseInstanceID;
             tempP.OnlyHigherThanProjectID = model.OnlyHigherThanProjectID;
             tempP.Weight = model.Weight;
             tempP.MinGradeToPassCourse =  model.MinGradeToPassCourse;
@@ -148,11 +148,11 @@ namespace CoursesAPI.Services.Services
         public FinalGradeViewModel GetFinalGrade(int CourseInstanceID,string SSN)
         {
 
-            var allProjects = (from p in _projects.All()
+            /*var allProjects = (from p in _projects.All()
                                         join pg in _projectgroups.All() on p.ProjectGroupID equals pg.ID
                                         where p.CourseInstanceID == CourseInstanceID
                                         select  p 
-                                      ).ToList();
+                                      ).ToList();*/
             var a = (from pg in _projectgroups.All()
                      join p in _projects.All() on pg.ID equals p.ProjectGroupID
                      where p.CourseInstanceID == CourseInstanceID
@@ -185,6 +185,7 @@ namespace CoursesAPI.Services.Services
              }
              double? totalGrade = 0;
              double totalWeight = 0;
+             Boolean failed = false;
              for (int i = 0; i < mypg.Count(); i++) {
                  int ID = mypg[i].ID;
              var allMyGrades = (from g in _grades.All()
@@ -196,7 +197,7 @@ namespace CoursesAPI.Services.Services
                                 select new CombinedKnowledge
                                 {
                                     ProjectId = z.ID,
-                                    MinGradeToPass = z.MinGradeToPassCourse,
+                                    MinGradeToPassCourse = z.MinGradeToPassCourse,
                                     ProjectName = z.Name,
                                     ProjectGroupId = z.ProjectGroupID,
                                     Weight = z.Weight,
@@ -214,11 +215,13 @@ namespace CoursesAPI.Services.Services
                  {
                      for (int x = 0; x < allMyGrades[0].GradesProjectCount; x++) { 
                          GradesThatCount.Add(allMyGrades.Last());
-                         mul = System.Convert.ToDouble(GradesThatCount[x].Weight); 
-                         allMyGrades.Remove(allMyGrades.Last());
-                         mul = GradesThatCount[x].Weight/100;
-                         totalGrade += GradesThatCount[x].GradeIs * mul;
+
+                         mul = System.Convert.ToDouble(allMyGrades.Last().Weight);
+                         mul /= 100;
+                         totalGrade += allMyGrades.Last().GradeIs * mul;
                          totalWeight += mul;
+                         allMyGrades.Remove(allMyGrades.Last());
+                         System.Diagnostics.Debug.WriteLine(totalWeight);
                      }
                     
                  }
@@ -226,23 +229,33 @@ namespace CoursesAPI.Services.Services
                  {
                      for (int x = 0; x < allMyGrades.Count(); x++)
                      {
+                         if (allMyGrades[x].MinGradeToPassCourse != null && allMyGrades[x].MinGradeToPassCourse > allMyGrades[x].GradeIs)
+                         {
+                             failed = true;
+                             break;
+                         }
                          mul = System.Convert.ToDouble(allMyGrades[x].Weight);
                          mul /= 100;
-                         System.Diagnostics.Debug.WriteLine(mul);
+                         
                          totalGrade += allMyGrades[x].GradeIs * mul;
                          totalWeight += mul;
+
                      }
 
                  }
                  
              }
-            
-             
-           
+
+            //This rounds up/down for FinalGrade
+             double Final = Convert.ToDouble(totalGrade) * 2;
+             Final = Math.Round(Final, MidpointRounding.AwayFromZero) / 2;
+             if (Final > 10) { Final = 10; }
             return new FinalGradeViewModel
             {
                 TotalWeight = totalWeight*10,
-                FinalGrade = totalGrade 
+                GradeCompleted = totalGrade,
+                FinalGrade = Final
+                
             };
             
         }
