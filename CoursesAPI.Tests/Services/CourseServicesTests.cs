@@ -75,6 +75,97 @@ namespace CoursesAPI.Tests.Services
 		}
 
         [TestMethod]
+        public void GetFinalGrade()
+        {
+            // Arrange:
+            const int courseId = 1;
+            const String ssn = "2701903249";
+
+            var persons = new List<Person>
+            {
+                new Person
+                {
+                    SSN = ssn,
+                    Name = "Stefan",
+                    Email = "dsadsa",
+
+                }
+            };
+
+            var courseInstances = new List<CourseInstance>
+            {
+                new CourseInstance
+                {
+                    ID = 1,
+                    CourseID = "dsddsa",
+                    SemesterID = "dsa",
+                }
+            };
+
+            var grades = new List<Grade> { 
+                new Grade
+                {
+                 ID = 0,
+                 ProjectID = 0,
+                 PersonID = "2701903249",
+                 GradeIs = 5,
+                },
+                new Grade
+                {
+                 ID = 1,
+                 ProjectID = 1,
+                 PersonID = "2701903249",
+                 GradeIs = 10,
+                }
+            };
+
+            var projects = new List<Project>
+            {
+                new Project{
+                    ID = 0,
+                    Name = "testP",
+                    ProjectGroupID = 0,
+                    CourseInstanceID = 1,
+                    OnlyHigherThanProjectID = null,
+                    Weight = 50,
+                    MinGradeToPassCourse = 5,
+                },
+
+                new Project{
+                    ID = 1,
+                    Name = "testP",
+                    ProjectGroupID = 0,
+                    CourseInstanceID = 1,
+                    OnlyHigherThanProjectID = null,
+                    Weight = 50,
+                    MinGradeToPassCourse = 5,
+                }
+            };
+
+            var projectGroup = new List<ProjectGroup>
+            {
+                new ProjectGroup{
+                    ID = 0,
+                    name = "test group",
+                    GradesProjectCount = 2,
+                }
+            };
+
+            _uow.SetRepositoryData(projectGroup);
+            _uow.SetRepositoryData(projects);
+            _uow.SetRepositoryData(grades);
+            _uow.SetRepositoryData(persons);
+            _uow.SetRepositoryData(courseInstances);
+
+            // Act:
+            var list = _service.GetFinalGrade(courseId, ssn);
+            FinalGradeDTO result = list;
+
+            // Assert:
+            Assert.AreEqual(7.5, result.FinalGrade, "wrong grade");
+        }
+
+        [TestMethod]
         public void AddProjectGroup()
         {
             // Arrange:
