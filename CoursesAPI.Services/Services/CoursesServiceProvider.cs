@@ -41,7 +41,7 @@ namespace CoursesAPI.Services.Services
 
 		public List<Person> GetCourseTeachers(int courseInstanceID)
 		{
-            //TODO
+            
             var result = (from tr in _teacherRegistrations.All()
                           join p in _persons.All() on tr.SSN equals p.SSN
                           where tr.CourseInstanceID == courseInstanceID
@@ -51,35 +51,7 @@ namespace CoursesAPI.Services.Services
 			return result;
 		}
 
-		public List<CourseInstanceDTO> GetCourseInstancesOnSemester(string semester)
-		{
-			// TODO:
-          /* var result = (from ci in _courseInstances.All()
-                          join s in _semesters.All() on ci.SemesterID equals s.ID                  
-                          where s.ID == semester  
-                          join t in _teacherRegistrations.All() on ci.ID equals t.CourseInstanceID
-                          where t.Type == 1
-                          join p in _persons.All() on t.SSN equals p.SSN
-                          select new CourseInstanceDTO
-                          {
-                              CourseID = ci.CourseID,
-                              CourseInstanceID = ci.ID,
-                              Name = s.Name,
-                              MainTeacher = p.Name
-                          }
-                         ).ToList(); */
-           // í vinnslu, muna að returna result
-           
-			return null;
-		}
-
-		public List<CourseInstanceDTO> GetSemesterCourses(string semester)
-		{
-			// TODO
-			return null;
-		}
-
-        public AddProjectGroupDTO AddProjectGroup(AddProjectGroupDTO model)
+        public AddProjectGroupViewModel AddProjectGroup(AddProjectGroupViewModel model)
         {
 
             ProjectGroup tempPG = new ProjectGroup();
@@ -90,7 +62,7 @@ namespace CoursesAPI.Services.Services
             return model;
         }
 
-        public ProjectDTO AddProject(ProjectDTO model)
+        public ProjectViewModel AddProject(ProjectViewModel model)
         {
 
             Project tempP = new Project();
@@ -107,7 +79,7 @@ namespace CoursesAPI.Services.Services
             return model;
         }
 
-        public GradeDTO AddGrade(GradeDTO model)
+        public GradeViewModels AddGrade(GradeViewModels model)
         {
 
             Grade tempG = new Grade();
@@ -120,7 +92,7 @@ namespace CoursesAPI.Services.Services
             return model;
         }
 
-        public GradeViewModel GetGrade(int ProjectID, string SSN)
+        public GradeDTO GetGrade(int ProjectID, string SSN)
         {
 
             var tempGrade = _grades.All().SingleOrDefault(g => g.ProjectID == ProjectID && g.PersonID == SSN);
@@ -128,7 +100,7 @@ namespace CoursesAPI.Services.Services
 
             var pos = GradePos(ProjectID, SSN);
             System.Diagnostics.Debug.WriteLine(SSN);
-            return new GradeViewModel
+            return new GradeDTO
             {
                 ProjectName = tempProject.Name,
                 Grade = tempGrade.GradeIs,
@@ -148,14 +120,9 @@ namespace CoursesAPI.Services.Services
             return _projects.All().SingleOrDefault(p => p.ID == ProjectID);
         }
 
-        public FinalGradeViewModel GetFinalGrade(int CourseInstanceID,string SSN)
+        public FinalGradeDTO GetFinalGrade(int CourseInstanceID,string SSN)
         {
-
-            /*var allProjects = (from p in _projects.All()
-                                        join pg in _projectgroups.All() on p.ProjectGroupID equals pg.ID
-                                        where p.CourseInstanceID == CourseInstanceID
-                                        select  p 
-                                      ).ToList();*/
+   
             var a = (from pg in _projectgroups.All()
                      join p in _projects.All() on pg.ID equals p.ProjectGroupID
                      where p.CourseInstanceID == CourseInstanceID
@@ -263,16 +230,19 @@ namespace CoursesAPI.Services.Services
              Final = Math.Round(Final, MidpointRounding.AwayFromZero) / 2;
              if (Final > 10) { Final = 10; }
 
+
             string passFail ;
             if (failed) { passFail = "Failed"; }
             else{passFail = "Passed";}
              
-            var fgvm =  new FinalGradeViewModel
+            var fgvm =  new FinalGradeDTO
             {
+                PersonID = SSN,
                 PercentCompleted = totalWeight*100,
                 GradeCompleted = totalGrade,
                 FinalGrade = Final,
                 PassFail = passFail
+
                 
             };
             
@@ -280,14 +250,14 @@ namespace CoursesAPI.Services.Services
             
         }
     
-       public List<FinalGradeViewModel> GetAllFinalGrades(int CourseInstanceID){
+       public List<FinalGradeDTO> GetAllFinalGrades(int CourseInstanceID){
 
            List<Person> StudentsInCourse  = (from g in _grades.All() 
                          join p in _projects.All() on g.ProjectID equals p.ID
                          where p.CourseInstanceID == CourseInstanceID
                          join per in _persons.All() on g.PersonID equals per.SSN
                          select per).ToList();
-           List<FinalGradeViewModel> returnValue = new List<FinalGradeViewModel>();
+           List<FinalGradeDTO> returnValue = new List<FinalGradeDTO>();
            List<Person> singular = new List<Person>();
            Boolean exists = false;
            foreach(Person p in StudentsInCourse)
@@ -304,9 +274,9 @@ namespace CoursesAPI.Services.Services
                exists = false;
            }
            foreach(Person p in singular)
-           {
-               
-               returnValue.Add(GetFinalGrade(CourseInstanceID, p.SSN));            
+           {            
+               returnValue.Add(GetFinalGrade(CourseInstanceID, p.SSN));  
+          
            }
            
            return returnValue;
@@ -348,36 +318,15 @@ namespace CoursesAPI.Services.Services
            };
           
        }
-       public GradePositionDTO FinalGradePos(FinalGradeViewModel myGrade, int CourseInstanceID)
+       public List<GradeDTO> GetGrades(int ProjectID)
        {
-           List<FinalGradeViewModel> all = GetAllFinalGrades(CourseInstanceID);
-           
-           all = all.OrderBy(fg => fg.FinalGrade).ToList();
-           int from = 0;
-           int to = 0;
-           for (int i = 0; i < all.Count(); i++)
+           List<GradeDTO> allGrades = new List<GradeDTO>();
+           var all = (from g in _grades.All() where g.ProjectID == ProjectID select g).ToList();
+           foreach (var a in all)
            {
-               
-               if (all[i].FinalGrade == myGrade.FinalGrade)
-               {
-                   if(from == 0)
-                   {
-                       from = (all.Count + 1)-(i + 1);
-                       to = from;
-
-                   }
-                   else
-                   {
-                       to = (all.Count + 1)-(i + 1);
-                   }
-               }
-               
+               allGrades.Add(GetGrade(ProjectID, a.PersonID));
            }
-           
-           return new GradePositionDTO {
-               From = from,
-               To = to 
-           };
+           return allGrades;
        }
 	}
 }

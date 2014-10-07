@@ -24,12 +24,7 @@ namespace CoursesAPI.Controllers
             return _service.GetCourseTeachers(courseInstanceID);
 		}
 		
-        [HttpGet]
-		[Route("semester/{semester}")]
-		public List<CourseInstanceDTO> GetCoursesOnSemester(string semester)
-		{
-			return _service.GetSemesterCourses(semester);
-		}
+        
         /// <summary>
         /// Adds a ProjectGroup into the table ProjectGroup in the database.
         /// </summary>
@@ -37,7 +32,7 @@ namespace CoursesAPI.Controllers
         /// <returns>AddProjectGroupDTO</returns>
         [HttpPost]
         [Route("projectgroups")]
-        public AddProjectGroupDTO AddProjectGroup(AddProjectGroupDTO model)
+        public AddProjectGroupViewModel AddProjectGroup(AddProjectGroupViewModel model)
         {
            return _service.AddProjectGroup(model);
         }
@@ -49,7 +44,7 @@ namespace CoursesAPI.Controllers
         /// <returns>ProjectDTO model</returns>
         [HttpPost]
         [Route("project")]
-        public ProjectDTO AddProject(ProjectDTO model)
+        public ProjectViewModel AddProject(ProjectViewModel model)
         {
             return _service.AddProject(model);
         }
@@ -60,8 +55,8 @@ namespace CoursesAPI.Controllers
         /// <param name="model"></param>
         /// <returns>GradeDTO</returns>
         [HttpPost]
-        [Route("grade")]
-        public GradeDTO AddGrade(GradeDTO model)
+        [Route("teacher/grade")]
+        public GradeViewModels AddGrade(GradeViewModels model)
         {
             return _service.AddGrade(model);
         }
@@ -72,11 +67,21 @@ namespace CoursesAPI.Controllers
         /// <param name="ProjectID"></param>
         /// <returns>GradeViewModel</returns>
         [HttpGet]
-        [Route("grade/{ProjectID}")]
-        public GradeViewModel GetGrade(int ProjectID)
-        {
-            string SSN = "2211902119";
+        [Route("grade/{ProjectID}/{SSN}")]
+        public GradeDTO GetGrade(int ProjectID,string SSN)
+        {           
             return _service.GetGrade(ProjectID,SSN);
+        }
+        /// <summary>
+        /// Teacher can Get a list of all grades for a given project
+        /// </summary>
+        /// <param name="ProjectID"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("teacher/grades/{ProjectID}")]
+        public List<GradeDTO> GetGrades(int ProjectID)
+        {            
+            return _service.GetGrades(ProjectID);
         }
 
         /// <summary>
@@ -85,22 +90,22 @@ namespace CoursesAPI.Controllers
         /// <param name="CourseInstanceID"></param>
         /// <returns>FinalGradeViewModel</returns>
        [HttpGet]
-       [Route("{CourseInstanceID}/finalgrade")]
-        public FinalGradeViewModel FinalGrade(int CourseInstanceID)
+       [Route("{CourseInstanceID}/finalgrade/{SSN}")]
+        public FinalGradeDTO FinalGrade(int CourseInstanceID,string SSN)
        {
-           string SSN = "2211902119";
-           
+     
            return _service.GetFinalGrade(CourseInstanceID, SSN);
        }
 
        [HttpGet]
        [Route("{CourseInstanceID}/finalgrades")]
-       public List<FinalGradeViewModel> AllFinalGrades(int CourseInstanceID)
+       public List<FinalGradeDTO> AllFinalGrades(int CourseInstanceID)
        {
            
             return _service.GetAllFinalGrades(CourseInstanceID);
 
        }
+      
 
 
 

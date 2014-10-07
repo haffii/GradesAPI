@@ -1,16 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CoursesAPI.Models
 {
-    public class GradeDTO
+   public class GradeDTO
     {
-        [Required]
-        public string PersonID { get; set; }
+       public String ProjectName { get; set; }
+       public double? Grade { get; set; }
 
-        [Required]
-        public int ProjectID { get; set; }
-
-        public double? GradeIs { get; set; }
-
+       public int PositionFrom { get; set; }
+       public int PositionTo { get; set; }
     }
 }

@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 
 	/// </summary>
-	public class CourseInstanceDTO
+	public class CourseInstanceViewModel
 	{
 		public int    CourseInstanceID { get; set; }
 		public string CourseID         { get; set; }

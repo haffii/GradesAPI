@@ -1,5 +1,5 @@
 C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Models\bin\Debug\CoursesAPI.Models.dll
 C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Models\bin\Debug\CoursesAPI.Models.pdb
-C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Models\obj\Debug\CoursesAPI.Models.csprojResolveAssemblyReference.cache
 C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Models\obj\Debug\CoursesAPI.Models.dll
 C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Models\obj\Debug\CoursesAPI.Models.pdb
+C:\Users\Hafþór Örn\Desktop\GradesAPI\CoursesAPI.Models\obj\Debug\CoursesAPI.Models.csprojResolveAssemblyReference.cache

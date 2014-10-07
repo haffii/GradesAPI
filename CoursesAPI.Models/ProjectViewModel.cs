@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoursesAPI.Models
 {
-    public class ProjectDTO
+    public class ProjectViewModel
     {
         public string Name { get; set; }
         public int ProjectGroupID { get; set; } 

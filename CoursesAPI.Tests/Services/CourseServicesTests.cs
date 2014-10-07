@@ -84,7 +84,7 @@ namespace CoursesAPI.Tests.Services
             var projectGroups = new List<ProjectGroup> { };
             _uow.SetRepositoryData(projectGroups);
 
-            AddProjectGroupDTO pg = new AddProjectGroupDTO{
+            AddProjectGroupViewModel pg = new AddProjectGroupViewModel{
                 Name = n,
                 GradesProjectCount = c,
             };
@@ -105,7 +105,7 @@ namespace CoursesAPI.Tests.Services
             var projects = new List<Project> { };
             _uow.SetRepositoryData(projects);
 
-            ProjectDTO p = new ProjectDTO
+            ProjectViewModel p = new ProjectViewModel
             {
                 Name = "test1",
                 ProjectGroupID = 1,
