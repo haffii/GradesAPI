@@ -1,7 +1,7 @@
 ﻿namespace CoursesAPI.Models
 {
 	/// <summary>
-	/// 
+	/// Use this to Add to the courseInstanceTable
 	/// </summary>
 	public class CourseInstanceViewModel
 	{

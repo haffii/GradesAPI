@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoursesAPI.Models
 {
+    /// <summary>
+    /// what we need to add a Project to the projects table
+    /// </summary>
     public class ProjectViewModel
     {
         public string Name { get; set; }

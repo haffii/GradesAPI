@@ -2,6 +2,9 @@
 
 namespace CoursesAPI.Models
 {
+    /// <summary>
+    /// What we take in to add to the table ProjectGroup
+    /// </summary>
     public class AddProjectGroupViewModel
     {
         [Required]

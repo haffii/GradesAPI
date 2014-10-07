@@ -21,7 +21,7 @@ namespace CoursesAPI.Services.Services
         private readonly IRepository<Grade> _grades;
         private readonly IRepository<Project> _projects;
         private readonly IRepository<ProjectGroup> _projectgroups;
-
+        
 
 		public CoursesServiceProvider(IUnitOfWork uow)
 		{
@@ -38,7 +38,7 @@ namespace CoursesAPI.Services.Services
             _projectgroups = _uow.GetRepository<ProjectGroup>();
 
 		}
-
+        
 		public List<Person> GetCourseTeachers(int courseInstanceID)
 		{
             

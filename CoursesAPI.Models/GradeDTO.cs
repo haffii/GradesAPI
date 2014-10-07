@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoursesAPI.Models
 {
+    /// <summary>
+    /// used to return the grade from a given project (or a list of this for the teacher)
+    /// </summary>
    public class GradeDTO
     {
        public String ProjectName { get; set; }

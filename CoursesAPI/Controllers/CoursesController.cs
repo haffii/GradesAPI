@@ -98,7 +98,7 @@ namespace CoursesAPI.Controllers
        }
 
        [HttpGet]
-       [Route("{CourseInstanceID}/finalgrades")]
+       [Route("{CourseInstanceID}/teacher/finalgrades")]
        public List<FinalGradeDTO> AllFinalGrades(int CourseInstanceID)
        {
            

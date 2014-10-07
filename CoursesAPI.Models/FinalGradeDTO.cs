@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoursesAPI.Models
 {
+    /// <summary>
+    /// what we return when the user requests his/hers finalGrade
+    /// </summary>
     public class FinalGradeDTO
     {
         public string PersonID { get; set; }

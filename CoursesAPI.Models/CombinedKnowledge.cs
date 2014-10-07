@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoursesAPI.Models
 {
+    /// <summary>
+    /// this is a Model that consist of alot of information from varius tables from a nice query
+    /// </summary>
     public class CombinedKnowledge
     {
     public int   ProjectId {get;set;}
