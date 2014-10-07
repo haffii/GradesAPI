@@ -252,7 +252,7 @@ namespace CoursesAPI.Services.Services
              if (Final > 10) { Final = 10; }
             return new FinalGradeViewModel
             {
-                TotalWeight = totalWeight*10,
+                PercentCompleted = totalWeight*100,
                 GradeCompleted = totalGrade,
                 FinalGrade = Final
                 

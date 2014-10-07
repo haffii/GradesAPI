@@ -30,7 +30,11 @@ namespace CoursesAPI.Controllers
 		{
 			return _service.GetSemesterCourses(semester);
 		}
-
+        /// <summary>
+        /// Adds a ProjectGroup into the table ProjectGroup in the database.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>AddProjectGroupDTO</returns>
         [HttpPost]
         [Route("projectgroups")]
         public AddProjectGroupDTO AddProjectGroup(AddProjectGroupDTO model)
@@ -38,6 +42,11 @@ namespace CoursesAPI.Controllers
            return _service.AddProjectGroup(model);
         }
 
+        /// <summary>
+        /// Adds a new Project to the table Projects in the Database
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>ProjectDTO model</returns>
         [HttpPost]
         [Route("project")]
         public ProjectDTO AddProject(ProjectDTO model)
@@ -45,6 +54,11 @@ namespace CoursesAPI.Controllers
             return _service.AddProject(model);
         }
 
+        /// <summary>
+        /// Adds a new grade to the table grades in the database
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>GradeDTO</returns>
         [HttpPost]
         [Route("grade")]
         public GradeDTO AddGrade(GradeDTO model)
@@ -52,6 +66,11 @@ namespace CoursesAPI.Controllers
             return _service.AddGrade(model);
         }
 
+        /// <summary>
+        /// Returns a grade for a given ProjectId and SSN
+        /// </summary>
+        /// <param name="ProjectID"></param>
+        /// <returns>GradeViewModel</returns>
         [HttpGet]
         [Route("grade/{ProjectID}")]
         public GradeViewModel GetGrade(int ProjectID)
@@ -60,6 +79,11 @@ namespace CoursesAPI.Controllers
             return _service.GetGrade(ProjectID,SSN);
         }
 
+        /// <summary>
+        /// Calculates a Students FinalGrade
+        /// </summary>
+        /// <param name="CourseInstanceID"></param>
+        /// <returns>FinalGradeViewModel</returns>
        [HttpGet]
        [Route("{CourseInstanceID}/finalgrade")]
         public FinalGradeViewModel FinalGrade(int CourseInstanceID)

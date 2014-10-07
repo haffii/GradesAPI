@@ -9,7 +9,7 @@ namespace CoursesAPI.Models
     public class FinalGradeViewModel
     {
         public double? FinalGrade { get; set; }
-        public double TotalWeight { get; set; }
+        public double PercentCompleted { get; set; }
         public double? GradeCompleted { get; set; }
     }
 }
