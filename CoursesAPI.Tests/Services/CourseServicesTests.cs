@@ -178,6 +178,13 @@ namespace CoursesAPI.Tests.Services
                 },
                 new Person
                 {
+                    SSN = "2901903249",
+                    Name = "Stefan",
+                    Email = "dsadsa",
+
+                },
+                new Person
+                {
                     SSN = "2801903249",
                     Name = "Stefa",
                     Email = "ddsa",
@@ -212,16 +219,23 @@ namespace CoursesAPI.Tests.Services
                 },
                 new Grade
                 {
-                 ID = 0,
+                 ID = 2,
                  ProjectID = 1,
                  PersonID = "2701903249",
                  GradeIs = 5,
                 },
                 new Grade
                 {
-                 ID = 1,
+                 ID = 3,
                  ProjectID = 1,
                  PersonID = "2801903249",
+                 GradeIs = 5,
+                },
+                new Grade
+                {
+                 ID = 4,
+                 ProjectID = 0,
+                 PersonID = "2901903249",
                  GradeIs = 5,
                 }
             };
@@ -287,6 +301,9 @@ namespace CoursesAPI.Tests.Services
             List<FinalGradeDTO> finalGradeList = _service.GetAllFinalGrades(1);
             FinalGradeDTO finalGrade = _service.GetFinalGrade(1, "2701903249");
             List<GradeDTO> gradeList = _service.GetGrades(0);
+            GradePositionDTO gradePos = _service.GradePos(0, "2701903249");
+            GradePositionDTO gradePoss = _service.GradePos(0, "2801903249");
+            GradePositionDTO gradePosss = _service.GradePos(0, "2901903249");
 
 
             // Assert:
@@ -295,6 +312,12 @@ namespace CoursesAPI.Tests.Services
             Assert.AreEqual(7.5, finalGradeList[1].FinalGrade, "wrong grade");
             Assert.AreEqual(5, gradeList[0].Grade, "wrong grade in getGrades student 1");
             Assert.AreEqual(10, gradeList[1].Grade, "wrong grade in getGrades student 2");
+            Assert.AreEqual(3, gradePos.From);
+            Assert.AreEqual(1, gradePoss.From);
+            Assert.AreEqual(3, gradePosss.From);
+            Assert.AreEqual(2, gradePos.To);
+            Assert.AreEqual(1, gradePoss.To);
+            Assert.AreEqual(2, gradePosss.To);
         }
 	}
 }
