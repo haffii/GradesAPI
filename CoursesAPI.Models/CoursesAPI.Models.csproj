@@ -45,6 +45,7 @@
     <Compile Include="CourseInstanceDTO.cs" />
     <Compile Include="FinalGradeViewModel.cs" />
     <Compile Include="GradeDTO.cs" />
+    <Compile Include="GradePositionDTO.cs" />
     <Compile Include="GradeViewModel.cs" />
     <Compile Include="ProjectDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

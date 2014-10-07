@@ -10,5 +10,8 @@ namespace CoursesAPI.Models
     {
        public String ProjectName { get; set; }
        public double? Grade { get; set; }
+
+       public int PositionFrom { get; set; }
+       public int PositionTo { get; set; }
     }
 }

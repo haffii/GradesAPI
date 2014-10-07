@@ -126,11 +126,14 @@ namespace CoursesAPI.Services.Services
             var tempGrade = _grades.All().SingleOrDefault(g => g.ProjectID == ProjectID && g.PersonID == SSN);
             var tempProject = _projects.All().SingleOrDefault(p => p.ID == ProjectID);
 
-
+            var pos = GradePos(ProjectID, SSN);
+            System.Diagnostics.Debug.WriteLine(SSN);
             return new GradeViewModel
             {
                 ProjectName = tempProject.Name,
-                Grade = tempGrade.GradeIs
+                Grade = tempGrade.GradeIs,
+                PositionFrom = pos.From,
+                PositionTo = pos.To
                 
             };
         }
@@ -210,8 +213,11 @@ namespace CoursesAPI.Services.Services
                       ).ToList();
                   allMyGrades = allMyGrades.OrderBy(b => b.GradeIs).ToList();
                   List<CombinedKnowledge> GradesThatCount = new List<CombinedKnowledge>();
-                  double mul;
-                 if(allMyGrades.Count() > allMyGrades[0].GradesProjectCount)
+                 double mul;
+
+                 
+                 if (!(allMyGrades.Count() == 0)) { 
+                 if(allMyGrades.Count() > allMyGrades.First().GradesProjectCount)
                  {
                      for (int x = 0; x < allMyGrades[0].GradesProjectCount; x++) {
                          //GradesThatCount.Add(allMyGrades.Last());
@@ -225,7 +231,7 @@ namespace CoursesAPI.Services.Services
                          mul /= 100;
                          totalGrade += allMyGrades.Last().GradeIs * mul;
                          totalWeight += mul;
-                         System.Diagnostics.Debug.WriteLine(allMyGrades.Last().GradeIs);
+                         
                          allMyGrades.Remove(allMyGrades.Last());
                          
                      }
@@ -249,7 +255,7 @@ namespace CoursesAPI.Services.Services
                      }
 
                  }
-                 
+                 } 
              }
 
             //This rounds up/down for FinalGrade
@@ -260,7 +266,8 @@ namespace CoursesAPI.Services.Services
             string passFail ;
             if (failed) { passFail = "Failed"; }
             else{passFail = "Passed";}
-            return new FinalGradeViewModel
+             
+            var fgvm =  new FinalGradeViewModel
             {
                 PercentCompleted = totalWeight*100,
                 GradeCompleted = totalGrade,
@@ -269,7 +276,108 @@ namespace CoursesAPI.Services.Services
                 
             };
             
+            return fgvm;
+            
         }
+    
+       public List<FinalGradeViewModel> GetAllFinalGrades(int CourseInstanceID){
 
+           List<Person> StudentsInCourse  = (from g in _grades.All() 
+                         join p in _projects.All() on g.ProjectID equals p.ID
+                         where p.CourseInstanceID == CourseInstanceID
+                         join per in _persons.All() on g.PersonID equals per.SSN
+                         select per).ToList();
+           List<FinalGradeViewModel> returnValue = new List<FinalGradeViewModel>();
+           List<Person> singular = new List<Person>();
+           Boolean exists = false;
+           foreach(Person p in StudentsInCourse)
+           {
+               for(int i = 0; i<singular.Count();i++)
+               {
+                   if(singular[i].SSN == p.SSN)
+                   {
+                       exists = true;
+                       break;
+                   }
+               }
+               if (!exists) { singular.Add(p); }
+               exists = false;
+           }
+           foreach(Person p in singular)
+           {
+               
+               returnValue.Add(GetFinalGrade(CourseInstanceID, p.SSN));            
+           }
+           
+           return returnValue;
+           
+       }
+       public GradePositionDTO GradePos(int ProjectID, string PersonID)
+       {
+           var allGrades = (from g in _grades.All() where g.ProjectID == ProjectID select g).ToList();
+           var myGrade = _grades.All().SingleOrDefault(g => g.ProjectID == ProjectID && g.PersonID == PersonID);
+
+           allGrades = allGrades.OrderBy(fg => fg.GradeIs).ToList();
+           int from = 0;
+           int to = 0;
+           for (int i = 0; i < allGrades.Count(); i++)
+           {
+               
+               if (allGrades[i].GradeIs == myGrade.GradeIs)
+               {
+                   if (from == 0)
+                   {
+                       from = (allGrades.Count) - (i);
+                       to = from;
+
+                   }
+                   else 
+                   {
+                       to = (allGrades.Count) - (i);
+                       
+                       //System.Diagnostics.Debug.WriteLine(allGrades.First().GradeIs);
+                   }
+               }
+
+           }
+           
+           return new GradePositionDTO
+           {
+               From = from,
+               To = to
+           };
+          
+       }
+       public GradePositionDTO FinalGradePos(FinalGradeViewModel myGrade, int CourseInstanceID)
+       {
+           List<FinalGradeViewModel> all = GetAllFinalGrades(CourseInstanceID);
+           
+           all = all.OrderBy(fg => fg.FinalGrade).ToList();
+           int from = 0;
+           int to = 0;
+           for (int i = 0; i < all.Count(); i++)
+           {
+               
+               if (all[i].FinalGrade == myGrade.FinalGrade)
+               {
+                   if(from == 0)
+                   {
+                       from = (all.Count + 1)-(i + 1);
+                       to = from;
+
+                   }
+                   else
+                   {
+                       to = (all.Count + 1)-(i + 1);
+                   }
+               }
+               
+           }
+           
+           return new GradePositionDTO {
+               From = from,
+               To = to 
+           };
+       }
 	}
 }

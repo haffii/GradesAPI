@@ -112,10 +112,11 @@ namespace CoursesAPI.Tests.Services
                 OnlyHigherThanProjectID = null,
                 Weight = 10,
                 MinGradeToPassCourse = 5,
+                CourseInstanceID = 1
             };
 
             // Act:
-            var a = _service.AddProject(p, 1);
+            var a = _service.AddProject(p);
 
             // Assert:
             var tmp = _service.GetProject(0);
