@@ -208,20 +208,26 @@ namespace CoursesAPI.Services.Services
 
                                 }
                       ).ToList();
-                  allMyGrades.OrderBy(b => b.GradeIs);
+                  allMyGrades = allMyGrades.OrderBy(b => b.GradeIs).ToList();
                   List<CombinedKnowledge> GradesThatCount = new List<CombinedKnowledge>();
                   double mul;
                  if(allMyGrades.Count() > allMyGrades[0].GradesProjectCount)
                  {
-                     for (int x = 0; x < allMyGrades[0].GradesProjectCount; x++) { 
-                         GradesThatCount.Add(allMyGrades.Last());
+                     for (int x = 0; x < allMyGrades[0].GradesProjectCount; x++) {
+                         //GradesThatCount.Add(allMyGrades.Last());
 
+                         if (allMyGrades[x].MinGradeToPassCourse != null && allMyGrades[x].MinGradeToPassCourse > allMyGrades[x].GradeIs)
+                         {
+                             failed = true;
+                            // break;
+                         }
                          mul = System.Convert.ToDouble(allMyGrades.Last().Weight);
                          mul /= 100;
                          totalGrade += allMyGrades.Last().GradeIs * mul;
                          totalWeight += mul;
+                         System.Diagnostics.Debug.WriteLine(allMyGrades.Last().GradeIs);
                          allMyGrades.Remove(allMyGrades.Last());
-                         System.Diagnostics.Debug.WriteLine(totalWeight);
+                         
                      }
                     
                  }
@@ -232,7 +238,7 @@ namespace CoursesAPI.Services.Services
                          if (allMyGrades[x].MinGradeToPassCourse != null && allMyGrades[x].MinGradeToPassCourse > allMyGrades[x].GradeIs)
                          {
                              failed = true;
-                             break;
+                            // break;
                          }
                          mul = System.Convert.ToDouble(allMyGrades[x].Weight);
                          mul /= 100;
@@ -250,11 +256,16 @@ namespace CoursesAPI.Services.Services
              double Final = Convert.ToDouble(totalGrade) * 2;
              Final = Math.Round(Final, MidpointRounding.AwayFromZero) / 2;
              if (Final > 10) { Final = 10; }
+
+            string passFail ;
+            if (failed) { passFail = "Failed"; }
+            else{passFail = "Passed";}
             return new FinalGradeViewModel
             {
                 PercentCompleted = totalWeight*100,
                 GradeCompleted = totalGrade,
-                FinalGrade = Final
+                FinalGrade = Final,
+                PassFail = passFail
                 
             };
             
