@@ -163,19 +163,24 @@ namespace CoursesAPI.Tests.Services
         }
 
         [TestMethod]
-        public void GetFinalGrade()
+        public void GettingGradesAndFinalGrades()
         {
             // Arrange:
-            const int courseId = 1;
-            const String ssn = "2701903249";
 
             var persons = new List<Person>
             {
                 new Person
                 {
-                    SSN = ssn,
+                    SSN = "2701903249",
                     Name = "Stefan",
                     Email = "dsadsa",
+
+                },
+                new Person
+                {
+                    SSN = "2801903249",
+                    Name = "Stefa",
+                    Email = "ddsa",
 
                 }
             };
@@ -201,9 +206,23 @@ namespace CoursesAPI.Tests.Services
                 new Grade
                 {
                  ID = 1,
+                 ProjectID = 0,
+                 PersonID = "2801903249",
+                 GradeIs = 10,
+                },
+                new Grade
+                {
+                 ID = 0,
                  ProjectID = 1,
                  PersonID = "2701903249",
-                 GradeIs = 10,
+                 GradeIs = 5,
+                },
+                new Grade
+                {
+                 ID = 1,
+                 ProjectID = 1,
+                 PersonID = "2801903249",
+                 GradeIs = 5,
                 }
             };
 
@@ -221,6 +240,25 @@ namespace CoursesAPI.Tests.Services
 
                 new Project{
                     ID = 1,
+                    Name = "testP",
+                    ProjectGroupID = 0,
+                    CourseInstanceID = 1,
+                    OnlyHigherThanProjectID = null,
+                    Weight = 50,
+                    MinGradeToPassCourse = 5,
+                },
+                new Project{
+                    ID = 2,
+                    Name = "testP",
+                    ProjectGroupID = 0,
+                    CourseInstanceID = 1,
+                    OnlyHigherThanProjectID = null,
+                    Weight = 50,
+                    MinGradeToPassCourse = 5,
+                },
+
+                new Project{
+                    ID = 3,
                     Name = "testP",
                     ProjectGroupID = 0,
                     CourseInstanceID = 1,
@@ -246,11 +284,17 @@ namespace CoursesAPI.Tests.Services
             _uow.SetRepositoryData(courseInstances);
 
             // Act:
-            var list = _service.GetFinalGrade(courseId, ssn);
-            FinalGradeDTO result = list;
+            List<FinalGradeDTO> finalGradeList = _service.GetAllFinalGrades(1);
+            FinalGradeDTO finalGrade = _service.GetFinalGrade(1, "2701903249");
+            List<GradeDTO> gradeList = _service.GetGrades(0);
+
 
             // Assert:
-            Assert.AreEqual(7.5, result.FinalGrade, "wrong grade");
+            Assert.AreEqual(5, finalGradeList[0].FinalGrade, "wrong grade in list of all grades");
+            Assert.AreEqual(5, finalGrade.FinalGrade, "wrong grade getting a single grade");
+            Assert.AreEqual(7.5, finalGradeList[1].FinalGrade, "wrong grade");
+            Assert.AreEqual(5, gradeList[0].Grade, "wrong grade in getGrades student 1");
+            Assert.AreEqual(10, gradeList[1].Grade, "wrong grade in getGrades student 2");
         }
 	}
 }
